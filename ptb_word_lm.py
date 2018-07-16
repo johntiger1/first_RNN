@@ -113,6 +113,7 @@ class PTBInput(object):
 class PTBModel(object):
   """The PTB model."""
 
+  # the actual NN model
   def __init__(self, is_training, config, input_):
     self._is_training = is_training
     self._input = input_
@@ -142,9 +143,9 @@ class PTBModel(object):
 
     # Use the contrib sequence loss and average over the batches
     loss = tf.contrib.seq2seq.sequence_loss(
-        logits,
-        input_.targets,
-        tf.ones([self.batch_size, self.num_steps], dtype=data_type()),
+        logits, # J: inputs into the logistic function
+        input_.targets, # J: the target words?
+        tf.ones([self.batch_size, self.num_steps], dtype=data_type()), #here, num steps is the length of the seqeunce, or number of to unroll
         average_across_timesteps=False,
         average_across_batch=True)
 
@@ -515,8 +516,8 @@ def main(_):
         valid_perplexity = run_epoch(session, mvalid)
         print("Epoch: %d Valid Perplexity: %.3f" % (i + 1, valid_perplexity))
 
-      test_perplexity = run_epoch(session, mtest)
-      print("Test Perplexity: %.3f" % test_perplexity)
+        test_perplexity = run_epoch(session, mtest)
+        print("Test Perplexity: %.3f" % test_perplexity)
 
       if FLAGS.save_path:
         print("Saving model to %s." % FLAGS.save_path)

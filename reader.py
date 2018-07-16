@@ -34,7 +34,8 @@ def _read_words(filename):
     else:
       return f.read().decode("utf-8").replace("\n", "<eos>").split()
 
-
+# probably need to adapt this to iteratively/lazily build the vocab
+#alternatively, we can just provide a LIST of file names here and do this action for all files...
 def _build_vocab(filename):
   data = _read_words(filename)
 
@@ -51,7 +52,7 @@ def _file_to_word_ids(filename, word_to_id):
   data = _read_words(filename)
   return [word_to_id[word] for word in data if word in word_to_id]
 
-
+# J: this is the method which gets the raw data from the files on disk
 def ptb_raw_data(data_path=None):
   """Load PTB raw data from data directory "data_path".
 
