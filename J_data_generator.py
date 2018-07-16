@@ -1,15 +1,30 @@
 
 
 import os, glob
-
+import random
 
 
 # randomly samples some of the files from the directory
-def select_files(directory):
+def select_files(directory, num):
+    count  = 0
+    list_files = []
+    random.seed(1001)
+
+
+    # deterministically retrieves the files. We need to randomly skip iterations then!
+
     for filename in glob.iglob(os.path.join(directory, "**", "*.txt"), recursive=True):
+        if len(list_files) > num: break
         print (filename)
-        # with open(filename) as file:
-        #     for line in file:
+        # count+=1
+        # if count>100:
+        #     break
+
+        if random.random() > 0.001:
+            list_files.append(filename)
+
+
+    return list_files
 
 
 '''
@@ -31,4 +46,5 @@ def create_concat_file(files):
 
 
 print ("hello")
-select_files()
+files = select_files("../pubmed_data/unzipped/", 100)
+create_concat_file(files)
